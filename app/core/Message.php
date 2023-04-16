@@ -14,7 +14,7 @@ class Message
         if (isset($_SESSION['message'])) {
             echo "
                 <script>
-                    alert('Data ". $_SESSION['message']['pesan'] . "');
+                    alert('". $_SESSION['message']['pesan'] . "');
                 </script>
                 ";
             unset($_SESSION['message']);

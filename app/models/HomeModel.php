@@ -2,8 +2,6 @@
 
 class HomeModel
 {
-
-
     public function query($query)
     {
         global $conn;
@@ -26,18 +24,20 @@ class HomeModel
     {
         global $conn;
 
-        $nik     = htmlspecialchars($data["nik"]);
         $nama    = htmlspecialchars($data["nama"]);
+        $username    = htmlspecialchars($data["username"]);
+        $password    = htmlspecialchars($data["password"]);
 
-        $photo = $this->uploud($nik);
+        $photo = $this->uploud($username);
         if (!$photo) {
             return false;
         }
 
         $query = "INSERT INTO users VALUES 
                     (NULL,
-                    '$nik', 
                     '$nama', 
+                    '$username', 
+                    '$password', 
                     '$photo')";
         mysqli_query($conn, $query);
 
@@ -47,29 +47,27 @@ class HomeModel
     {
         global $conn;
 
-
-        // ambil data dari tiap elemen dalam form
         $id     = $data["id"];
-        $nik     = htmlspecialchars($data["nik"]);
         $nama    = htmlspecialchars($data["nama"]);
+        $username    = htmlspecialchars($data["username"]);
+        $password    = htmlspecialchars($data["password"]);
         $photo_lama    = htmlspecialchars($data["photo_lama"]);
 
-        // cek apakah user menguploud gambar atau tidak
         if ($_FILES['photo']['error'] === 4) {
             $photo = $photo_lama;
         } else {
-            $photo = $this->uploud($nik);
+            unlink('public/img/' . $photo_lama);
+            $photo = $this->uploud($username);
         }
 
-        // query insert data
         $query = "UPDATE users SET
-                    nik = '$nik', 
                     nama = '$nama', 
+                    username = '$username', 
+                    password = '$password', 
                     photo = '$photo'   
                     WHERE id = '$id'";
         mysqli_query($conn, $query);
 
-        //cek 
         return mysqli_affected_rows($conn);
     }
 

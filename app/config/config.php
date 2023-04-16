@@ -1,5 +1,5 @@
 <?php 
-define("BASE_URL", "http://localhost/php-mvc/");
+define("BASE_URL", "http://localhost/simple-mvc-php-native-framework/");
 define("DB_HOST", "localhost");
 define("DB_USER", "root");
 define("DB_PASS", "root");

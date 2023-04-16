@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $data['title']; ?></title>
-</head>
-
 <body>
     <?= Message::show_message() ?>
 
@@ -18,11 +8,14 @@
             <input type="hidden" name="id" id="id" value="<?= $user['id']; ?>">
             <input type="hidden" name="photo_lama" id="photo_lama" value="<?= $user['photo']; ?>">
 
-            <label for="nik">NIK</label>
-            <input type="text" name="nik" id="nik" value="<?= $user['nik']; ?>">
-            <br>
             <label for="nama">Nama</label>
             <input type="text" name="nama" id="nama" value="<?= $user['nama']; ?>">
+            <br>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" value="<?= $user['username']; ?>">
+            <br>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" value="<?= $user['password']; ?>">
             <br>
             <label for="photo">Photo</label>
             <input type="file" name="photo" id="photo">
@@ -30,6 +23,7 @@
             <button type="submit" name="submit">Submit</button>
         <?php endforeach; ?>
     </form>
+    <br>
+    <br>
+    <a href="<?= BASE_URL . "home"; ?>">Kembali</a>
 </body>
-
-</html>
