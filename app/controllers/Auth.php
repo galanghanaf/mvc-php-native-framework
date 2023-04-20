@@ -13,36 +13,17 @@ class Auth extends Controller
     {
 
         if (isset($_POST["submit"])) {
-            global $conn;
             $username = $_POST["username"];
             $password = $_POST["password"];
 
-            // cek apakah username yang diinput ada atau tidak
-            $result = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
-
-            // cek username menggunakan mysqli_num_rows secara satu persatu
-            // apabila ada, maka akan bernilai 1
-            if (mysqli_num_rows($result) === 1) {
-
-                // mengecek password dari yang inputkan di $password,
-                // disamakan dengan password di database menggunakan $row
-                $user = mysqli_fetch_assoc($result);
-                if ($password == $user["password"]) {
-                    // set session
-                    $_SESSION["login"] = [
-                        'username' => $user["username"],
-                        'nama' => $user["nama"],
-                    ];
-
-                    // apabila sama/berhasil dialihkan ke index.php
-                    Message::set_message('Anda Berhasil Login!');
-                    header("Location: " . BASE_URL . "home");
-                    // kemudian dihentikan dengan exit, agar tidak mengeksekusi script setelah header
-                    exit();
-                }
+            $result = Database::login('users', 'username', $username, $password);
+            if ($result == 0) {
+                Message::set_message('Anda Berhasil Login!');
+                header("Location: " . BASE_URL . "home");
+            } elseif($result == 1){
                 Message::set_message('Password Anda Salah!');
                 header("Location: " . BASE_URL . "auth");
-            } else {
+            } elseif($result == 2){
                 Message::set_message('Username Anda Salah!');
                 header("Location: " . BASE_URL . "auth");
             }

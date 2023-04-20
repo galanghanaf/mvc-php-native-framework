@@ -14,7 +14,7 @@ class Home extends Controller
     public function index()
     {
         $data['title'] = "Home";
-        $data["users"] = $this->model("HomeModel")->query("SELECT * FROM users");
+        $data["users"] = $this->model("HomeModel")->getAllData('users');
         $this->view('templates/header', $data);
         $this->view('home/index', $data);
         $this->view('templates/footer');
@@ -23,13 +23,24 @@ class Home extends Controller
     public function insert_user()
     {
         if (isset($_POST["submit"])) {
-            if ($this->model('HomeModel')->insert_user($_POST) > 0) {
-                Message::set_message('Data Berhasil Ditambahkan!');
-                header("Location: " . BASE_URL . 'home');
+            if ($_FILES['photo']['error'] === 4) {
+                $photo = NULL;
             } else {
-                Message::set_message('Data Gagal Ditambahkan!');
-                header("Location: " . BASE_URL . 'home/insert_user');
+                $file_name = uniqid($_POST['username']);
+                $file_location = 'public/img/';
+                $file_size = 1048576;  // 1 MegaByte = 1048576 Byte
+                $photo = Database::upload('photo', $file_location, $file_size, $file_name);
             }
+
+            $insert = [
+                'nama' => $_POST['nama'],
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
+                'photo' => $photo,
+            ];
+            Database::insert('users', $insert, 'home/insert_user');
+            Message::set_message('Data Berhasil Ditambahkan!');
+            header("Location: " . BASE_URL . 'home');
         } else {
             $data['title'] = "Tambah Data User";
             $this->view('templates/header', $data);
@@ -41,7 +52,7 @@ class Home extends Controller
     public function edit_user($id)
     {
         $data['title'] = "Edit User";
-        $data["users"] = $this->model("HomeModel")->query("SELECT * FROM users WHERE id = $id");
+        $data["users"] = $this->model("HomeModel")->getDataById("users", "id", $id);
         $this->view('templates/header', $data);
         $this->view('home/edit_user', $data);
         $this->view('templates/footer');
@@ -49,20 +60,37 @@ class Home extends Controller
     public function edit_user_action()
     {
         if (isset($_POST["submit"])) {
-            if ($this->model('HomeModel')->edit_user($_POST) > 0) {
-                Message::set_message('Data Berhasil Diubah!');
-                header("Location: " . BASE_URL . 'home');
+            if ($_FILES['photo']['error'] === 4) {
+                $photo = $_POST['photo_lama'];
             } else {
-                Message::set_message('Data Gagal Diubah!');
-                header("Location: " . BASE_URL . 'home/edit_user/' . $_POST['id']);
+                unlink('public/img/' . $_POST['photo_lama']);
+                $file_name = uniqid($_POST['username']);
+                $file_location = 'public/img/';
+                $file_size = 1048576;  // 1 MegaByte = 1048576 Byte
+                $photo = Database::upload('photo', $file_location, $file_size, $file_name);
             }
+
+            $update = [
+                'nama' => $_POST['nama'],
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
+                'photo' => $photo,
+            ];
+            $where = [
+                'id' => $_POST['id']
+            ];
+            Database::update('users', $update, $where, 'home/edit_user/' . $_POST['id']);
+            Message::set_message('Data Berhasil Diubah!');
+            header("Location: " . BASE_URL . 'home');
         }
     }
 
-    public function delete_user($where, $photo)
+    public function delete_user($where, $file = NULL)
     {
-        unlink('public/img/' . $photo);
-        $this->model("HomeModel")->delete_data('users', 'id', $where);
+        if ($file != NULL) {
+            unlink('public/img/' . $file);
+        }
+        Database::delete('users', 'id', $where);
         Message::set_message('Data Berhasil Dihapus!');
         header("Location: " . BASE_URL . 'home');
     }
