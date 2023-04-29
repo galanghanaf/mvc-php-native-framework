@@ -8,7 +8,7 @@ class App
 
     public function __construct()
     {
-        $url = $this->parseURL();
+        $url = $this->parse_url();
 
         // controller
         if ($url == NULL) {
@@ -40,7 +40,7 @@ class App
     }
 
     //mengambil url dan memecah sesuai keinginan
-    public function parseURL()
+    public function parse_url()
     {
         if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');

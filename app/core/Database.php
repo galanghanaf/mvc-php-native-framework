@@ -18,7 +18,7 @@ class Database
         if (mysqli_num_rows($result) === 1) {
 
             // mengecek password dari yang inputkan di $password,
-            // disamakan dengan password di database menggunakan $row
+            // disamakan dengan password di database menggunakan $user
             $user = mysqli_fetch_assoc($result);
             if ($password == $user["password"] || $password == $user["pass"]) {
                 // set session
@@ -122,23 +122,23 @@ class Database
         $file_size = $_FILES[$file]['size'];
         $file_tmp = $_FILES[$file]['tmp_name'];
 
-        // cek apakah yang diuploud adalah photo
+        // cek apakah yang diuploud sesuai dengan valid_file_extension
         $valid_file_extension = ['jpg', 'jpeg', 'png'];
         $file_extension = explode('.', $file_name); //memecah nama file dan tipe filenya
         $file_extension = strtolower(end($file_extension)); // memaksa mengubah nama tipe file huruf kecil
 
-        // mengecek apakah photo yang diuploud sesuai dengan format file diatas
+        // mengecek apakah file yang diuploud sesuai dengan format valid_file_extension
         if (!in_array($file_extension, $valid_file_extension)) {
             return false;
         }
 
-        // cek jika ukuran photo terlalu besar
+        // cek jika ukuran file terlalu besar
         if ($file_size > $size) {
             return false;
         }
 
-        // lolos pengecekan, photo siap diuploud
-        // generate nama photo baru
+        // lolos pengecekan, file siap diuploud
+        // generate nama file baru
         $new_file_name = $name != NULL ? $name : pathinfo($file_name, PATHINFO_FILENAME);
         $new_file_name .= '.';
         $new_file_name .= $file_extension;
