@@ -17,13 +17,13 @@ class Auth extends Controller
             $password = $_POST["password"];
 
             $result = Database::login('users', 'username', $username, $password);
-            if ($result == 0) {
+            if ($result == true) {
                 Message::set_message('Anda Berhasil Login!');
                 header("Location: " . BASE_URL . "home");
-            } elseif($result == 1){
+            } elseif ($result == false) {
                 Message::set_message('Password Anda Salah!');
                 header("Location: " . BASE_URL . "auth");
-            } elseif($result == 2){
+            } elseif ($result == false) {
                 Message::set_message('Username Anda Salah!');
                 header("Location: " . BASE_URL . "auth");
             }
@@ -35,15 +35,13 @@ class Auth extends Controller
         }
     }
 
-    public function _logout()
+    public function logout()
     {
         unset($_SESSION['login']);
-        $_SESSION = [];
         session_unset();
         session_destroy();
 
         Message::set_message('Anda Berhasil Logout!');
-
         header("Location: " . BASE_URL . "auth/index");
         exit;
     }

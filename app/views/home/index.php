@@ -1,7 +1,7 @@
 <body>
     <?= Message::show_message() ?>
-    <p>Selamat Datang, <?= $_SESSION['login']['nama'] ?></p>
-    <a href="<?= BASE_URL . 'auth/_logout'; ?>">Logout</a>
+    <p>Selamat Datang, <?= $_SESSION['login']['username'] ?></p>
+    <a href="<?= BASE_URL . 'auth/logout'; ?>">Logout</a>
     <br>
     <br>
     <h1>Table User</h1>

@@ -14,3 +14,5 @@ define("DB_USER", "username");
 define("DB_PASS", "password");
 define("DB_NAME", "nama_database");
 ```
+
+## How to use

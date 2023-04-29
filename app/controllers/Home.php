@@ -31,16 +31,20 @@ class Home extends Controller
                 $file_size = 1048576;  // 1 MegaByte = 1048576 Byte
                 $photo = Database::upload('photo', $file_location, $file_size, $file_name);
             }
-
-            $insert = [
-                'nama' => $_POST['nama'],
-                'username' => $_POST['username'],
-                'password' => $_POST['password'],
-                'photo' => $photo,
-            ];
-            Database::insert('users', $insert, 'home/insert_user');
-            Message::set_message('Data Berhasil Ditambahkan!');
-            header("Location: " . BASE_URL . 'home');
+            if ($photo == false) {
+                Message::set_message('Format Foto Tidak Sesuai!');
+                header("Location: " . BASE_URL . 'home/insert_user');
+            } else {
+                $insert = [
+                    'nama' => $_POST['nama'],
+                    'username' => $_POST['username'],
+                    'password' => $_POST['password'],
+                    'photo' => $photo,
+                ];
+                Database::insert('users', $insert, 'home/insert_user');
+                Message::set_message('Data Berhasil Ditambahkan!');
+                header("Location: " . BASE_URL . 'home');
+            }
         } else {
             $data['title'] = "Tambah Data User";
             $this->view('templates/header', $data);
@@ -69,19 +73,24 @@ class Home extends Controller
                 $file_size = 1048576;  // 1 MegaByte = 1048576 Byte
                 $photo = Database::upload('photo', $file_location, $file_size, $file_name);
             }
+            if ($photo == false) {
+                Message::set_message('Format Foto Tidak Sesuai!');
+                header("Location: " . BASE_URL . 'home/edit_user/' . $_POST['id']);
+            } else {
 
-            $update = [
-                'nama' => $_POST['nama'],
-                'username' => $_POST['username'],
-                'password' => $_POST['password'],
-                'photo' => $photo,
-            ];
-            $where = [
-                'id' => $_POST['id']
-            ];
-            Database::update('users', $update, $where, 'home/edit_user/' . $_POST['id']);
-            Message::set_message('Data Berhasil Diubah!');
-            header("Location: " . BASE_URL . 'home');
+                $update = [
+                    'nama' => $_POST['nama'],
+                    'username' => $_POST['username'],
+                    'password' => $_POST['password'],
+                    'photo' => $photo,
+                ];
+                $where = [
+                    'id' => $_POST['id']
+                ];
+                Database::update('users', $update, $where, 'home/edit_user/' . $_POST['id']);
+                Message::set_message('Data Berhasil Diubah!');
+                header("Location: " . BASE_URL . 'home');
+            }
         }
     }
 

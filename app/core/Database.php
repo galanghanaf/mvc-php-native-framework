@@ -10,26 +10,26 @@ class Database
 
     public static function login($table, $where, $username, $password)
     {
-        // cek apakah username yang diinput ada atau tidak
+        // cek apakah username/email yang diinput ada atau tidak
         $result = mysqli_query(self::conn(), "SELECT * FROM $table WHERE $where = '$username'");
 
-        // cek username menggunakan mysqli_num_rows secara satu persatu
+        // cek username/email menggunakan mysqli_num_rows secara satu persatu
         // apabila ada, maka akan bernilai 1
         if (mysqli_num_rows($result) === 1) {
 
             // mengecek password dari yang inputkan di $password,
             // disamakan dengan password di database menggunakan $row
             $user = mysqli_fetch_assoc($result);
-            if ($password == $user["password"]) {
+            if ($password == $user["password"] || $password == $user["pass"]) {
                 // set session
                 $_SESSION["login"] = [
                     $where => $user[$where],
                 ];
-                return 0;
+                return true;
             }
-           return 1;
+           return false;
         } else {
-            return 2;
+            return false;
         }
     }
 
@@ -116,12 +116,11 @@ class Database
         return mysqli_affected_rows(self::conn());
     }
 
-    public static function upload($key, $location, $size, $name = NULL)
+    public static function upload($file, $location, $size, $name = NULL)
     {
-        $file_name = $_FILES[$key]['name'];
-        $file_size = $_FILES[$key]['size'];
-        $file_error = $_FILES[$key]['error'];
-        $file_tmp = $_FILES[$key]['tmp_name'];
+        $file_name = $_FILES[$file]['name'];
+        $file_size = $_FILES[$file]['size'];
+        $file_tmp = $_FILES[$file]['tmp_name'];
 
         // cek apakah yang diuploud adalah photo
         $valid_file_extension = ['jpg', 'jpeg', 'png'];
