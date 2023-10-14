@@ -1,4 +1,4 @@
-# MVC PHP Native Framework
+# PHP MVC Framework
 Note: This system tested on PHP 8.1.10
 
 ## Introduction
