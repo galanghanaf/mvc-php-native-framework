@@ -1,5 +1,5 @@
 # PHP MVC Framework
-Note: This system tested on PHP 8.1.10
+Note: This system tested in PHP 8.1.10
 
 ## Introduction
 PHP MVC Framework merupakan project pertama buatan saya, mengenai sebuah Framework PHP yang dibuat dengan konsep OOP. Project ini sepenuhnya dibangun berdasarkan pengalaman saya ketika belajar PHP melalui kampus serta internet. Saya juga telah banyak memodifikasi dan juga mengembangkan berbagai macam fitur yang dapat membantu saya dalam proses pembuatan sistem yang saya buat hingga saat ini. 
