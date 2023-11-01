@@ -44,6 +44,17 @@ class Database
         return $rows;
     }
 
+    public static function query_check($table, $column, $where)
+    {
+        $result = mysqli_query(self::conn(), "SELECT * FROM $table WHERE $column = '$where'");
+
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function delete($table, $column, $where)
     {
         mysqli_query(self::conn(), "DELETE FROM $table WHERE $column = $where");
